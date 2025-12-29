@@ -1,3 +1,5 @@
+// masukkan dulu album, lalu lagu
+// untuk nambah data album
 1
 Telisik
 Danila
@@ -9,3 +11,34 @@ Sumbang
 Iwan-fals
 1982
 Pop
+
+// untuk nambah data lagu ke album
+2
+Ada-disana
+3.01
+1203004
+Telisik
+
+2
+Senja-Diambang-Pilu
+3.30
+1243000
+Telisik
+
+2
+Wahai-Kau
+4.02
+350000
+Telisik
+
+2
+Puing
+4.42
+352300
+Sumbang
+
+2
+Jendela-kelas1
+4.53
+352354300
+Sumbang
