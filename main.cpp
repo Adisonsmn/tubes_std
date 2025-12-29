@@ -13,7 +13,7 @@ int main(){
         fiturPage();
         cout << "Pilih fitur: ";
         cin >> opsi;
-        if(opsi == 15){
+        if(opsi == 0){
             active = false;
             goodBy();   
         }else{            

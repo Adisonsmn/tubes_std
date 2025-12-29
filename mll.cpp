@@ -10,23 +10,24 @@ void welcomePage(){
 void fiturPage(){
     cout << "              MENU FITUR                " << endl;
     cout << "===================================================" << endl;
-    cout << "1. Masukkan Data Album" << endl;
-    cout << "2. Masukkan Data Lagu" << endl;
-    cout << "3. Lihat List Album" << endl;
-    cout << "4. Lihat List lagu" << endl;
-    cout << "5. Hapus Data Album" << endl;
-    cout << "6. Hapus Data Lagu" << endl;
-    cout << "7. Update Data Album" << endl;
-    cout << "8. Update Data lagu" << endl;
-    cout << "9. Cari Album" << endl;
-    cout << "10. Cari Lagu" << endl;
-    cout << "11. Urutkan Album" << endl;
-    cout << "12. Urutkan Lagu per Album" << endl;
-    cout << "13. Total Album " << endl;
-    cout << "14. Total Lagu" << endl;
-    cout << "15. Keluar" << endl;
+    cout << "1. Masukkan Data Album(W)" << endl;
+    cout << "2. Masukkan Data Lagu(W)" << endl;
+    cout << "3. Lihat List Album(W)" << endl;
+    cout << "4. Lihat List lagu(W)" << endl;
+    cout << "5. Hapus Data Album(W)" << endl;
+    cout << "6. Hapus Data Lagu(W)" << endl;
+    cout << "7. Update Data Album(W)" << endl;
+    cout << "8. Update Data lagu(W)" << endl;
+    cout << "9. Cari Album(W)" << endl;
+    cout << "10. Cari Lagu(W)" << endl;
+    cout << "11. Urutkan Album(O)" << endl;
+    cout << "12. Urutkan Lagu per Album(O)" << endl;
+    cout << "13. Total Album(W) " << endl;
+    cout << "14. Total Lagu(W)" << endl;
+    cout << "15. Statistik ALbum(W) " << endl;
+    cout << "16. Export data ke file(O) " << endl;
+    cout << "0. Keluar" << endl;
     cout << "===================================================" << endl;
-
 };
 
 void goodBy(){
@@ -107,64 +108,89 @@ void executeOpsi(listAlbum &L,adrAlbum album,adrLagu lagu,int opsi){
     string pilihan;
     adrAlbum foundAlbm;
     adrLagu foundLagu;
+    adrLagu p;
     int pendengar;
     float durasi;
     int tahun;
+    int count;
     switch (opsi) {
         case 1 :
+            count = 1;
             cout << endl;
             cout << "================[INSERT DATA ALBUM]================"<< endl;
             cout << "Judul Album            : ";
             cin >> inputAlbum.judulAlbum;
             isExists = isAlbumExists(L,inputAlbum.judulAlbum);
-            while(isExists){
+            count =1;
+            while(isExists && count < 3){
                 cout << "ERROR!! album dengan judul "<< inputAlbum.judulAlbum << " sudah ada, masukan judul yang lain"<< endl;
                 cout << "Judul Album            : ";
                 cin >> inputAlbum.judulAlbum;
                 isExists = isAlbumExists(L,inputAlbum.judulAlbum);
+                count++;
+            }if(count < 3){
+                cout << "Artis                  : ";
+                cin >> inputAlbum.artis;
+                cout << "Tahun Rilis(1901-2025) : ";
+                cin >> inputAlbum.tahunRilis;
+                while((inputAlbum.tahunRilis < 1091 || inputAlbum.tahunRilis > 2025) && count < 3){
+                    cout << "Tahun Rilis Tidak valid\n";
+                    cout << "Tahun Rilis(1901-2025) : ";
+                    cin >> inputAlbum.tahunRilis;
+                    count++;
+                }
+                if(count < 3){
+                    cout << "Genre                  : ";
+                    cin >> inputAlbum.genre;
+                    newAlbm = createElementAlbum(inputAlbum.judulAlbum,inputAlbum.artis,inputAlbum.tahunRilis,inputAlbum.genre);
+                    insertDataAlbum(L,newAlbm);
+                    cout << "SUKESS!! Album berhasil di tambahkan";
+                }else{
+                    cout << "percobaan habis coba lagi\n";
+                }
+            }else{
+                cout << "percobaan habis coba lagi\n";
             }
-            cout << "Artis                  : ";
-            cin >> inputAlbum.artis;
-            if(inputIntNoNegatif(tahun,"Tahun Rilis            : ")){
-                inputAlbum.tahunRilis = tahun;
-            }
-            cout << "Genre                  : ";
-            cin >> inputAlbum.genre;
-            newAlbm = createElementAlbum(inputAlbum.judulAlbum,inputAlbum.artis,inputAlbum.tahunRilis,inputAlbum.genre);
-            insertDataAlbum(L,newAlbm);
-            cout << "SUKESS!! Album berhasil di tambahkan";
             break;
         case 2 :
+            count = 1;
             cout << endl;
             cout << "================[INSERT DATA LAGU]================"<< endl;
             cout << "Judul Lagu             : ";
             cin >> inputLagu.judulLagu;
-            if(inputFloatNoNegatif(durasi,"Durasi                 : ")){
-                inputLagu.durasi = durasi;
+            cout << "Durasi(min 0.10)       : ";
+            cin >> inputLagu.durasi;
+            while(inputLagu.durasi <= 0.10 && count <3){
+                cout << "Minimal Durasi tidak terpenuhi\n";
+                cout << "Durasi(min 0.10)   : ";
+                cin >> inputLagu.durasi;
+                count++;
             }
-            if(inputIntNoNegatif(pendengar,"Pendengar              :")){
-                inputLagu.pendengar = pendengar;
-            }
-            cout << "Masukkan lagu ke Album : ";
-            cin >> inputAlbum.judulAlbum;
-            found = searchAlbum(L,inputAlbum.judulAlbum);
-            while(found == nullptr){
-                cout << "ERROR!! album " << inputAlbum.judulAlbum << " tidak ada"<<endl;
-                cout << "ingin masukan ke album lain? y/n  : ";
-                cin >> pilihan;
-                if(pilihan == "y" || pilihan == "Y"){
-                    cout << "Masukkan lagu ke Album : ";
-                    cin >> inputAlbum.judulAlbum;
-                    found = searchAlbum(L,inputAlbum.judulAlbum);
-                }else{
-                    cout << "Penambahan data lagu baru dibatalkan";
-                    break;
+            if(count < 3){
+                cout << "Pendengar              : ";
+                cin >> inputLagu.pendengar;
+                cout << "Masukkan ke Album      : ";
+                cin >> inputAlbum.judulAlbum;
+                found = searchAlbum(L,inputAlbum.judulAlbum);
+                while(found == nullptr){
+                    cout << "album " << inputAlbum.judulAlbum << " tidak ada"<<endl;
+                    cout << "ingin masukan ke album lain? y/n  : ";
+                    cin >> pilihan;
+                    if(pilihan == "y" || pilihan == "Y"){
+                        cout << "Masukkan ke Album      : ";
+                        cin >> inputAlbum.judulAlbum;
+                        found = searchAlbum(L,inputAlbum.judulAlbum);
+                    }else{
+                        cout << "Penambahan data lagu baru dibatalkan";
+                        break;
+                    }
                 }
-            }
-            if(found != nullptr){
-                newLagu = createElementLagu(inputLagu.judulLagu,inputLagu.durasi,inputLagu.pendengar);
-                insertDatalagu(found,newLagu);    
-                cout << "Lagu berhasil di masukkan ke album";
+                if(found!= nullptr){
+                    newLagu = createElementLagu(inputLagu.judulLagu,inputLagu.durasi,inputLagu.pendengar);
+                    insertDatalagu(found,newLagu);
+                }
+            }else{
+                cout << "percobaan habis coba lagi\n";
             }
             break;
         case 3 :
@@ -179,11 +205,24 @@ void executeOpsi(listAlbum &L,adrAlbum album,adrLagu lagu,int opsi){
             cout << "2.First" << endl;
             cout << "3.Last" << endl;
             cout << "Input: ";
+            count =1;
             cin >> opsi;
             if(opsi == 1){
                 cout << "Masukkan judul album yang akan di hapus: ";
                 cin >> inputAlbum.judulAlbum;
-                deleteDataAlbumByJudul(L,inputAlbum.judulAlbum);
+                adrAlbum albmFound=searchAlbum(L,inputAlbum.judulAlbum);
+                while(albmFound == nullptr && count < 3){
+                    cout << "Album tidka ditemukan\n";
+                    cout << "Masukkan judul album yang akan di hapus: ";
+                    cin >> inputAlbum.judulAlbum;
+                    albmFound = searchAlbum(L,inputAlbum.judulAlbum);
+                    count++;
+                }
+                if(count < 3){
+                    deleteDataAlbumByJudul(L,inputAlbum.judulAlbum);
+                }else{
+                    cout <<"percobaan anda habis coba lagi\n";
+                }
             }else if(opsi == 2){
                 foundAlbm = L.first;
                 deleteFirstDataAlbum(L,foundAlbm);
@@ -201,12 +240,38 @@ void executeOpsi(listAlbum &L,adrAlbum album,adrLagu lagu,int opsi){
             cout << "3.Last" << endl;
             cout << "Input: ";
             cin >> opsi;
+            count = 1;
             if(opsi == 1){
-                cout << "Masukkan judul Lagu            : ";
-                cin >> inputLagu.judulLagu;
                 cout << "Masukkan album lagu tersebut   : ";
                 cin >> inputAlbum.judulAlbum;
-                deleteDataLaguByJudul(L,inputAlbum.judulAlbum, inputLagu.judulLagu);                
+                adrAlbum foundAlbm = searchAlbum(L,inputAlbum.judulAlbum);
+                while(foundAlbm == nullptr && count <3){
+                    cout << "Album tidak ditemukan\n";
+                    cout << "Masukkan album lagu tersebut   : ";
+                    cin >> inputAlbum.judulAlbum;
+                    foundAlbm = searchAlbum(L,inputAlbum.judulAlbum);
+                    count++;
+                }
+                if(count < 3){
+                    cout << "Masukkan judul Lagu            : ";
+                    cin >> inputLagu.judulLagu;
+                    adrLagu foundLagu = searchLagu(foundAlbm,inputLagu.judulLagu);
+                    while(foundLagu == nullptr && count < 3){
+                        cout << "lagu tidak ditemukan\n";
+                        cout << "Masukkan judul Lagu            : ";
+                        cin >> inputLagu.judulLagu;
+                        foundLagu = searchLagu(foundAlbm, inputLagu.judulLagu);
+                        count++;
+                    }
+                    if(count < 3){
+                        deleteDataLaguByJudul(L,foundLagu,foundAlbm);               
+                    }else{
+                        cout << "percobaan anda habis coba lagi\n";
+                    }
+                }else{
+                    cout << "percobaan anda habis coba lagi\n";
+
+                }
             }else if(opsi == 2){
                 cout <<  "Masukkan album yang first lagu  yang ingin dihapus"<< endl;
                 cout <<  "Masukkan album                :  ";
@@ -350,6 +415,38 @@ void executeOpsi(listAlbum &L,adrAlbum album,adrLagu lagu,int opsi){
             cout << "\nTotal Lagu: ";
             cout << totalLagu(L);
             break;
+        case 15 :
+            count = 1;
+            cout << "Judul ALbum: ";
+            cin >> inputAlbum.judulAlbum;
+            found = searchAlbum(L,inputAlbum.judulAlbum);
+            while(found == nullptr && count < 3){
+                cout << "Album tidak ditemukan\n";
+                cout << "Judul Album: ";
+                cin >> inputAlbum.judulAlbum;
+                found = searchAlbum(L,inputAlbum.judulAlbum);
+                count++;
+            }
+            if(count < 3){
+                cout << "====== Statistik Album "<< inputAlbum.judulAlbum<< " ======\n";
+                cout << "\nRata-Rata Durasi     :"<< AverageSongsDurationByAlbum(L, found);
+                p = longestDurationSongTitle(L,found);
+                cout << "\nDurasi Terpanjang    :"<< p->infoLagu.judulLagu << " - " << MaxDurationSongByALbum(L,found);
+                p = shortesDurationSongTitle(L,found);
+                cout << "\nDurasi Terpendek    :"<< p->infoLagu.judulLagu << " - " << MinDurationSongByALbum(L,found);
+                
+                cout << "\n \nRata-Rata Pendengar  :" << AverageListensByAlbum(L,found);
+                p = mostListenedSongTitle(L,found);
+                cout << "\nPendengar Terbanyak  :" << p->infoLagu.judulLagu << " - " << MaxListensSongByALbum(L,found);
+                p = leastSongTitle(L,found);
+                cout << "\nPendengar Terdikit   :" << p->infoLagu.judulLagu << " - "<< MinListensSongByALbum(L,found);
+            }else{
+                cout << "percobaan anda habis coba lagi\n";
+            }
+            break;
+        case 16:
+            exportToFile(L);
+            break;
         default: cout << "Masukkan 1-15!!!";
     }
 
@@ -474,37 +571,29 @@ void deleteDataAlbumByJudul(listAlbum &L,string judulAlbum){
     }
 };
 
-void deleteDataLaguByJudul(listAlbum &L, string judulAlbum, string judulLagu){
-    adrAlbum almbFound = searchAlbum(L,judulAlbum);
-    adrLagu laguFound = searchLagu(almbFound,judulLagu);
-    
-    if(almbFound == nullptr){
-        cout << "Album dengan judul: " <<judulAlbum <<  "tidak ditemukan"<< endl;
-    }else if(laguFound == nullptr){
-        cout << "Lagu dengan judul: "<< judulLagu << "tidak ditemukand di album: " << judulAlbum << endl;
-    }else {
-        if(laguFound == almbFound->firstLagu){
-            if(laguFound->nextLagu != nullptr){
-                almbFound->firstLagu = laguFound->nextLagu;
-                almbFound->firstLagu->prevLagu = nullptr;
-                cout << "Data berhasil dihapus"<< endl;
-            }else{
-                almbFound->firstLagu = nullptr;
-                cout << "Data berhasil dihapus"<< endl;
-            }
+void deleteDataLaguByJudul(listAlbum &L, adrLagu laguFound, adrAlbum almbFound){
+    if(laguFound == almbFound->firstLagu){
+        if(laguFound->nextLagu != nullptr){
+            almbFound->firstLagu = laguFound->nextLagu;
+            almbFound->firstLagu->prevLagu = nullptr;
+            cout << "Data berhasil dihapus"<< endl;
         }else{
-            if(laguFound->nextLagu == nullptr){
-                laguFound->prevLagu->nextLagu = nullptr;
-                laguFound->prevLagu =nullptr;
-                cout << "Data berhasil dihapus"<< endl;
-            }else{
-                laguFound->prevLagu->nextLagu = laguFound->nextLagu;
-                laguFound->nextLagu->prevLagu = laguFound->prevLagu;
-                cout << "Data berhasil dihapus"<< endl;
-            }
+            almbFound->firstLagu = nullptr;
+            cout << "Data berhasil dihapus"<< endl;
         }
-        
+    }else{
+        if(laguFound->nextLagu == nullptr){
+            laguFound->prevLagu->nextLagu = nullptr;
+            laguFound->prevLagu =nullptr;
+            cout << "Data berhasil dihapus"<< endl;
+        }else{
+            laguFound->prevLagu->nextLagu = laguFound->nextLagu;
+            laguFound->nextLagu->prevLagu = laguFound->prevLagu;
+            cout << "Data berhasil dihapus"<< endl;
+        }
     }
+    
+    
 }; // delete after
 
 void deleteLastDataAlbum(listAlbum &L,adrAlbum p){
@@ -789,40 +878,43 @@ void editDataAlbum(listAlbum &L,string judulAlbum){
     if(!isEmptyAlbum(L)){
         adrAlbum p = searchAlbum(L,judulAlbum);
         if(p!=nullptr){
-            cout << "\n=== EDIT DATA ALBUM ===" << endl;
-            cout << "Judul Album: "<< p->infoAlbum.judulAlbum<< endl;
-            cout << "Artis: "<< p->infoAlbum.artis<< endl;
-            cout << "Tahun Rilis: "<< p->infoAlbum.tahunRilis<< endl;
-            cout << "Genre: "<< p->infoAlbum.genre<< endl;
+            cout << "\n======== EDIT DATA ALBUM ========" << endl;
+            cout << "Judul Album    : "<< p->infoAlbum.judulAlbum<< endl;
+            cout << "Artis          : "<< p->infoAlbum.artis<< endl;
+            cout << "Tahun Rilis    : "<< p->infoAlbum.tahunRilis<< endl;
+            cout << "Genre          : "<< p->infoAlbum.genre<< endl;
             
             infotypeAlbum input;
-            cout << "\nMasukkan data baru(kosongkan jika tidak ingin diubah!!):" << endl;
-            cout << "Judul Album: ";
+            cout << "\nMasukkan data baru\n(isi dengan - jika tidak ingin diubah!!):" << endl;
+            cout << "Judul Album    : ";
             cin >> input.judulAlbum;
-            if(!input.judulAlbum.empty()){
+            if(input.judulAlbum == "-"){
+                cout << "akan di isi dengan yang sebelumnya\n";
+            }else{
                 p->infoAlbum.judulAlbum = input.judulAlbum;
             }
-
-            cout << "Arits: ";
+            cout << "Artis          : ";
             cin >> input.artis;
-            if(!input.artis.empty()){
+            if(input.artis == "-"){
+                cout << "akan di isi dengan yang sebelumnya\n";
+            }else{
                 p->infoAlbum.artis = input.artis;
             }
-
-            cout << "Tahun Rilis(1990-2025): ";
+            cout << "Tahun Rilis(1901-2026): ";
             cin >> input.tahunRilis;
-            if(input.tahunRilis < 1990 || input.tahunRilis > 2025){
+            if(input.tahunRilis < 1901 || input.tahunRilis > 2025){
                 cout << "Tahun tidak valid, akan di isi dengan yang sebelumnya\n";
             }else{
                 p->infoAlbum.tahunRilis = input.tahunRilis;
             }
-
-            cout << "Genre: ";
+            
+            cout << "Genre          : ";
             cin >> input.genre;
-            if(!input.genre.empty()){
+            if(input.genre == "-"){
+                cout << "akan di isi dengan yang sebelumnya\n";
+            }else{
                 p->infoAlbum.genre = input.genre;
             }
-            
             cout << "\nData Berhasil diperbaruhi\n";
         }else{
             cout << "Album tidak ditemukan\n";
@@ -838,16 +930,18 @@ void editDataLagu(listAlbum &L, string judulAlbum, string judulLaguLama){
         if(!isEmptyLagu(foundAlbm)){
             adrLagu foundlagu = searchLagu(foundAlbm,judulLaguLama);
             if(foundlagu != nullptr){
-                cout << "\n=== EDIT DATA LAGU ===" << endl;
+                cout << "\n======== EDIT DATA LAGU ========" << endl;
                 cout << "Judul Lagu         : "<< foundlagu->infoLagu.judulLagu<< endl;
                 cout << "Durasi             : "<< foundlagu->infoLagu.durasi<< endl;
                 cout << "Jumlah Pendengar   : "<< foundlagu->infoLagu.pendengar<< endl;
                 
                 infotypeLagu input;
-                cout << "\nMasukkan data baru(kosongkan jika tidak ingin diubah!!):" << endl;
-                cout << "Judul Lagu: ";
+                cout << "\nMasukkan data baru\n(isi dengan - jika tidak ingin diubah):" << endl;
+                cout << "Judul Lagu     : ";
                 cin >> input.judulLagu;
-                if(!input.judulLagu.empty()){
+                if(input.judulLagu == "-"){
+                    cout << "akan di isi denga yang sebelumnya\n";
+                }else{
                     foundlagu->infoLagu.judulLagu = input.judulLagu;
                 }
 
@@ -862,7 +956,7 @@ void editDataLagu(listAlbum &L, string judulAlbum, string judulLaguLama){
                 cout << "Jumlah Pendengar: ";
                 cin >> input.pendengar;
                 if(input.pendengar < 0 ){
-                    cout << "Tahun tidak valid, akan di isi dengan yang sebelumnya\n";
+                    cout << "Pendengar tidak valid, akan di isi dengan yang sebelumnya\n";
                 }else{
                     foundlagu->infoLagu.pendengar = input.pendengar;
                 }
@@ -877,84 +971,150 @@ void editDataLagu(listAlbum &L, string judulAlbum, string judulLaguLama){
 
 };
 
-
-bool inputIntNoNegatif(int &outVlaue, string pesan){
-    string temp;
-    while(true){
-        cout << pesan;
-        cin >> temp;
-        bool valid = true;
-        for(int i = 0;i< temp.length();i++){
-            if(i== 0 && temp[i] == '-'){
-                continue;
-            }
-            if(!isdigit(temp[i])){
-                valid = false;
-                break;
-            }
-        }
-        if(!valid){
-            cout << "Format tidak sesuai\n";
-            continue;
-        }
-        outVlaue = stoi(temp);
-
-        if(outVlaue < 0){
-            cout << "Invalid tidak boleh negatif\n";
-            continue;
-        }
-        return true;
+float AverageSongsDurationByAlbum(listAlbum L,adrAlbum p){
+    float avg = 0;
+    int count = 0;
+    adrLagu q = p->firstLagu;
+    while(q!=nullptr){
+        avg += q->infoLagu.durasi;
+        q = q->nextLagu; 
+        count++;
     }
+    return avg/float(count);
 };
-bool inputFloatNoNegatif(float &outValue, string pesan) {
-    string temp;
 
-    while (true) {
-        cout << pesan;
-        cin >> temp;
+int AverageListensByAlbum(listAlbum L,adrAlbum p){
+    int avg = 0;
+    int count = 0;
+    adrLagu q = p->firstLagu;
+    while(q!= nullptr){
+        avg += q->infoLagu.pendengar;
+        q =q->nextLagu;
+        count++;
+    } 
+    return avg/count;
+};
 
-        bool valid = true;
-        bool decimalFound = false;
-
-        for (int i = 0; i < temp.length(); i++) {
-
-            // minus hanya boleh di depan
-            if (i == 0 && temp[i] == '-') {
-                continue;
-            }
-
-            // jika titik desimal
-            if (temp[i] == '.') {
-                if (decimalFound) { 
-                    valid = false; 
-                    break;          // tidak boleh ada dua titik
-                }
-                decimalFound = true;
-                continue;
-            }
-
-            // selain digit → invalid
-            if (!isdigit(temp[i])) {
-                valid = false;
-                break;
-            }
+float MaxDurationSongByALbum(listAlbum L, adrAlbum p){
+    float max = p->firstLagu->infoLagu.durasi;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(max < q->infoLagu.durasi){
+            max = q->infoLagu.durasi;
         }
+        q =q->nextLagu;
+    } 
+    return max;
+    
+};
 
-        if (!valid) {
-            cout << "Format tidak sesuai\n";
-            continue;
+float MinDurationSongByALbum(listAlbum L, adrAlbum p){
+    float min = p->firstLagu->infoLagu.durasi;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(min > q->infoLagu.durasi){
+            min = q->infoLagu.durasi;
         }
+        q =q->nextLagu;
+    } 
+    return min;
+};
 
-        // konversi aman (karena format sudah dicek)
-        outValue = stof(temp);
-
-        if (outValue < 0) {
-            cout << "Invalid tidak boleh negatif\n";
-            continue;
+int MaxListensSongByALbum(listAlbum L, adrAlbum p){
+    int max = p->firstLagu->infoLagu.pendengar;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(max < q->infoLagu.pendengar){
+            max = q->infoLagu.pendengar;
         }
+        q =q->nextLagu;
+    } 
+    return max;
+};
 
-        return true; // sukses
+int MinListensSongByALbum(listAlbum L, adrAlbum p){
+    int min = p->firstLagu->infoLagu.pendengar;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(min > q->infoLagu.pendengar){
+            min = q->infoLagu.pendengar;
+        }
+        q =q->nextLagu;
+    } 
+    return min;
+};
+
+adrLagu mostListenedSongTitle(listAlbum L, adrAlbum p){
+    adrLagu mostListened = p->firstLagu;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(mostListened->infoLagu.pendengar < q->infoLagu.pendengar){
+            mostListened = q;
+        }
+        q =q->nextLagu;
+    } 
+    return mostListened;
+};
+
+adrLagu leastSongTitle(listAlbum L, adrAlbum p){
+    adrLagu leastListened = p->firstLagu;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(leastListened->infoLagu.pendengar > q->infoLagu.pendengar){
+            leastListened = q;
+        }
+        q =q->nextLagu;
+    } 
+    return leastListened;
+};
+
+adrLagu longestDurationSongTitle(listAlbum L, adrAlbum p){
+    adrLagu maxDuration = p->firstLagu;
+    adrLagu q = p->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(maxDuration->infoLagu.durasi < q->infoLagu.durasi){
+            maxDuration = q;
+        }
+        q =q->nextLagu;
+    } 
+    return maxDuration;
+};
+
+adrLagu shortesDurationSongTitle(listAlbum L, adrAlbum a){
+    adrLagu minDuration = a->firstLagu;
+    adrLagu q = a->firstLagu->nextLagu;
+    while(q!= nullptr){
+        if(minDuration->infoLagu.durasi > q->infoLagu.durasi){
+            minDuration = q;
+        }
+        q =q->nextLagu;
+    } 
+    return minDuration;
+};
+
+
+void exportToFile(listAlbum L) {
+    ofstream file("data_album.txt");
+    
+    adrAlbum album = L.first;
+    while(album != nullptr) {
+        file << "ALBUM: " << album->infoAlbum.judulAlbum << endl;
+        file << "Artis: " << album->infoAlbum.artis << endl;
+        file << "Tahun: " << album->infoAlbum.tahunRilis << endl;
+        file << "Genre: " << album->infoAlbum.genre << endl;
+        
+        adrLagu lagu = album->firstLagu;
+        while(lagu != nullptr) {
+            file << "  - " << lagu->infoLagu.judulLagu 
+                 << " | " << lagu->infoLagu.durasi 
+                 << " | " << lagu->infoLagu.pendengar << endl;
+            lagu = lagu->nextLagu;
+        }
+        file << endl;
+        album = album->nextAlbum;
     }
+    file.close();
+    cout << "Data berhasil diexport ke data_album.txt\n";
 }
 
 void initDataDummy(listAlbum &L) {

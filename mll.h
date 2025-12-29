@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <limits>
+#include <fstream>
 using namespace std;
 // struktur MLL
 struct album{
@@ -56,8 +57,6 @@ void displayListLagu(listAlbum L);
 // end procedure tampilan
 
 // utils 
-bool inputIntNoNegatif(int &outVlaue, string pesan);
-bool inputFloatNoNegatif(float &outValue, string pesan);
 void executeOpsi(listAlbum &L,adrAlbum album,adrLagu lagu,int opsi);
 void createListAlbum(listAlbum &L);
 bool isEmptyAlbum(listAlbum L);
@@ -75,7 +74,7 @@ void insertDatalagu(adrAlbum &q, adrLagu p ); // insert last
 
 // Hapus data album dan lagu
 void deleteDataAlbumByJudul(listAlbum &L,string judulAlbum); // delte after
-void deleteDataLaguByJudul(listAlbum &L, string judulAlbum, string judulLagu); // delete after
+void deleteDataLaguByJudul(listAlbum &L, adrLagu laguFound, adrAlbum almbFound); // delete after
 void deleteLastDataAlbum(listAlbum &L,adrAlbum p);
 void deleteFirstDataAlbum(listAlbum &L,adrAlbum p);
 void deleteLastDataLagu(adrAlbum &q,adrLagu p);
@@ -102,6 +101,21 @@ void sortDataLaguByPendengariAsc(adrAlbum &p);
 void sortDataLaguByPendengariDesc(adrAlbum &p);
 
 // end sorting album dan lagu
+
+// Statistik album
+float AverageSongsDurationByAlbum(listAlbum L,adrAlbum p);
+int AverageListensByAlbum(listAlbum L,adrAlbum p);
+float MaxDurationSongByALbum(listAlbum L, adrAlbum p);
+float MinDurationSongByALbum(listAlbum L, adrAlbum p);
+int MaxListensSongByALbum(listAlbum L, adrAlbum p);
+int MinListensSongByALbum(listAlbum L, adrAlbum p);
+adrLagu mostListenedSongTitle(listAlbum L, adrAlbum p);
+adrLagu leastSongTitle(listAlbum L, adrAlbum p);
+adrLagu longestDurationSongTitle(listAlbum L, adrAlbum p);
+adrLagu shortesDurationSongTitle(listAlbum L, adrAlbum a);
+void exportToFile(listAlbum L);
+void topFiveSong(listAlbum L);
+// end Statistik album
 
 // hitung total album dan lagu
 int totalAlbum(listAlbum L);
